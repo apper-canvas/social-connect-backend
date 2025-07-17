@@ -1,0 +1,72 @@
+[
+  {
+    "Id": 1,
+    "tag": "SocialConnect",
+    "count": 1245,
+    "trending": true,
+    "createdAt": "2024-01-15T10:30:00Z"
+  },
+  {
+    "Id": 2,
+    "tag": "Photography",
+    "count": 8934,
+    "trending": true,
+    "createdAt": "2024-01-14T18:45:00Z"
+  },
+  {
+    "Id": 3,
+    "tag": "UXDesign",
+    "count": 3456,
+    "trending": true,
+    "createdAt": "2024-01-14T14:20:00Z"
+  },
+  {
+    "Id": 4,
+    "tag": "Fitness",
+    "count": 12567,
+    "trending": true,
+    "createdAt": "2024-01-14T09:15:00Z"
+  },
+  {
+    "Id": 5,
+    "tag": "Cooking",
+    "count": 5678,
+    "trending": true,
+    "createdAt": "2024-01-13T20:30:00Z"
+  },
+  {
+    "Id": 6,
+    "tag": "Tech",
+    "count": 15678,
+    "trending": true,
+    "createdAt": "2024-01-13T16:45:00Z"
+  },
+  {
+    "Id": 7,
+    "tag": "Travel",
+    "count": 9876,
+    "trending": true,
+    "createdAt": "2024-01-13T12:10:00Z"
+  },
+  {
+    "Id": 8,
+    "tag": "Music",
+    "count": 7890,
+    "trending": true,
+    "createdAt": "2024-01-12T23:55:00Z"
+  },
+  {
+    "Id": 9,
+    "tag": "Coffee",
+    "count": 4321,
+    "trending": false,
+    "createdAt": "2024-01-12T08:30:00Z"
+  },
+  {
+    "Id": 10,
+    "tag": "Design",
+    "count": 6789,
+    "trending": false,
+    "createdAt": "2024-01-11T17:20:00Z"
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "Id": 1,
+    "username": "socialconnect",
+    "displayName": "SocialConnect",
+    "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    "bio": "Welcome to SocialConnect! The best place to connect with friends and share your moments.",
+    "followersCount": 15420,
+    "followingCount": 234,
+    "postsCount": 89,
+    "verified": true,
+    "createdAt": "2023-01-15T10:30:00Z"
+  },
+  {
+    "Id": 2,
+    "username": "alexjohnson",
+    "displayName": "Alex Johnson",
+    "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+    "bio": "Photography enthusiast 📸 | Digital nomad 🌍 | Coffee lover ☕",
+    "followersCount": 2340,
+    "followingCount": 567,
+    "postsCount": 234,
+    "verified": false,
+    "createdAt": "2023-02-20T14:45:00Z"
+  },
+  {
+    "Id": 3,
+    "username": "sarahchen",
+    "displayName": "Sarah Chen",
+    "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+    "bio": "UX Designer at @techcorp | Building beautiful digital experiences ✨",
+    "followersCount": 4567,
+    "followingCount": 890,
+    "postsCount": 156,
+    "verified": true,
+    "createdAt": "2023-03-10T09:20:00Z"
+  },
+  {
+    "Id": 4,
+    "username": "mikewilson",
+    "displayName": "Mike Wilson",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    "bio": "Fitness coach 💪 | Healthy lifestyle advocate | Helping you reach your goals",
+    "followersCount": 8923,
+    "followingCount": 123,
+    "postsCount": 345,
+    "verified": false,
+    "createdAt": "2023-04-05T16:15:00Z"
+  },
+  {
+    "Id": 5,
+    "username": "emilydavis",
+    "displayName": "Emily Davis",
+    "avatar": "https://images.unsplash.com/photo-1494790108755-2616b9a18e2b?w=150&h=150&fit=crop&crop=face",
+    "bio": "Food blogger 🍕 | Recipe creator | Sharing delicious moments from around the world",
+    "followersCount": 3456,
+    "followingCount": 678,
+    "postsCount": 289,
+    "verified": true,
+    "createdAt": "2023-05-12T11:30:00Z"
+  },
+  {
+    "Id": 6,
+    "username": "davidbrown",
+    "displayName": "David Brown",
+    "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    "bio": "Tech entrepreneur 🚀 | Building the future of social media",
+    "followersCount": 12456,
+    "followingCount": 345,
+    "postsCount": 178,
+    "verified": true,
+    "createdAt": "2023-06-08T13:45:00Z"
+  },
+  {
+    "Id": 7,
+    "username": "jessicalee",
+    "displayName": "Jessica Lee",
+    "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=face",
+    "bio": "Travel blogger ✈️ | Exploring the world one country at a time",
+    "followersCount": 6789,
+    "followingCount": 456,
+    "postsCount": 567,
+    "verified": false,
+    "createdAt": "2023-07-22T08:10:00Z"
+  },
+  {
+    "Id": 8,
+    "username": "tomanderson",
+    "displayName": "Tom Anderson",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    "bio": "Music producer 🎵 | Creating beats that move the soul",
+    "followersCount": 5234,
+    "followingCount": 234,
+    "postsCount": 123,
+    "verified": false,
+    "createdAt": "2023-08-14T17:25:00Z"
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "Id": 1,
+    "postId": 1,
+    "userId": 2,
+    "text": "Welcome to the community! This platform looks amazing!",
+    "createdAt": "2024-01-15T11:00:00Z"
+  },
+  {
+    "Id": 2,
+    "postId": 1,
+    "userId": 3,
+    "text": "So excited to be part of this! Great work on the design.",
+    "createdAt": "2024-01-15T11:15:00Z"
+  },
+  {
+    "Id": 3,
+    "postId": 2,
+    "userId": 4,
+    "text": "Absolutely stunning shot! The colors are incredible.",
+    "createdAt": "2024-01-14T19:00:00Z"
+  },
+  {
+    "Id": 4,
+    "postId": 2,
+    "userId": 5,
+    "text": "I love golden hour photography! This is perfect.",
+    "createdAt": "2024-01-14T19:30:00Z"
+  },
+  {
+    "Id": 5,
+    "postId": 3,
+    "userId": 6,
+    "text": "Can't wait to see the final designs! UX is so important.",
+    "createdAt": "2024-01-14T14:45:00Z"
+  },
+  {
+    "Id": 6,
+    "postId": 4,
+    "userId": 7,
+    "text": "Great motivation! I need to get back to the gym.",
+    "createdAt": "2024-01-14T09:45:00Z"
+  },
+  {
+    "Id": 7,
+    "postId": 5,
+    "userId": 8,
+    "text": "Homemade pasta is the best! Would love the recipe.",
+    "createdAt": "2024-01-13T21:00:00Z"
+  },
+  {
+    "Id": 8,
+    "postId": 6,
+    "userId": 1,
+    "text": "Congratulations on the launch! Innovation at its finest.",
+    "createdAt": "2024-01-13T17:00:00Z"
+  }
+]
