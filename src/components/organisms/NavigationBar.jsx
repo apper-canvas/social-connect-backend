@@ -1,15 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
 import Avatar from "@/components/atoms/Avatar";
+import StoryRing from "@/components/molecules/StoryRing";
+import { storyService } from "@/services/api/storyService";
 import { cn } from "@/utils/cn";
 
-const NavigationBar = ({ currentUser, onCreatePost }) => {
+const NavigationBar = ({ currentUser, onCreatePost, onCreateStory, onViewStory }) => {
   const location = useLocation();
   const [isCreateHovered, setIsCreateHovered] = useState(false);
+  const [stories, setStories] = useState([]);
+  const [userStories, setUserStories] = useState([]);
 
-  const navItems = [
+  useEffect(() => {
+    if (currentUser) {
+      loadStories();
+    }
+  }, [currentUser]);
+
+  const loadStories = async () => {
+    try {
+      const allStories = await storyService.getAll();
+      setStories(allStories);
+      
+      // Get current user's stories
+      const currentUserStories = allStories.filter(story => story.userId === currentUser.Id);
+      setUserStories(currentUserStories);
+    } catch (err) {
+      console.error("Error loading stories:", err);
+    }
+  };
+
+  const handleStoryClick = () => {
+    if (userStories.length > 0) {
+      onViewStory({ stories: userStories, startIndex: 0 });
+    } else {
+      onCreateStory();
+    }
+  };
+const navItems = [
     { name: "Home", path: "/", icon: "Home" },
     { name: "Explore", path: "/explore", icon: "Compass" },
     { name: "Create", path: "#", icon: "Plus", isCreate: true },
@@ -69,15 +99,23 @@ const NavigationBar = ({ currentUser, onCreatePost }) => {
           </nav>
         </div>
         
-        {/* User Profile Section */}
+{/* User Profile Section */}
         <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-700">
           <div className="flex items-center space-x-3">
-            <Avatar 
-              src={currentUser?.avatar} 
-              alt={currentUser?.displayName || currentUser?.username}
-              fallback={currentUser?.displayName?.charAt(0) || currentUser?.username?.charAt(0)}
-              size="md"
-            />
+            <div className="cursor-pointer" onClick={handleStoryClick}>
+              <StoryRing 
+                hasStory={userStories.length > 0}
+                isViewed={false}
+                size="md"
+              >
+                <Avatar 
+                  src={currentUser?.avatar} 
+                  alt={currentUser?.displayName || currentUser?.username}
+                  fallback={currentUser?.displayName?.charAt(0) || currentUser?.username?.charAt(0)}
+                  size="md"
+                />
+              </StoryRing>
+            </div>
             <div className="flex-1">
               <p className="font-medium text-white">
                 {currentUser?.displayName || currentUser?.username}
@@ -114,14 +152,22 @@ const NavigationBar = ({ currentUser, onCreatePost }) => {
                     )
                   }
                 >
-                  {item.name === "Profile" ? (
-                    <Avatar 
-                      src={currentUser?.avatar} 
-                      alt={currentUser?.displayName || currentUser?.username}
-                      fallback={currentUser?.displayName?.charAt(0) || currentUser?.username?.charAt(0)}
-                      size="sm"
-                      className="mb-1"
-                    />
+{item.name === "Profile" ? (
+                    <div className="cursor-pointer" onClick={handleStoryClick}>
+                      <StoryRing 
+                        hasStory={userStories.length > 0}
+                        isViewed={false}
+                        size="sm"
+                      >
+                        <Avatar 
+                          src={currentUser?.avatar} 
+                          alt={currentUser?.displayName || currentUser?.username}
+                          fallback={currentUser?.displayName?.charAt(0) || currentUser?.username?.charAt(0)}
+                          size="sm"
+                          className="mb-1"
+                        />
+                      </StoryRing>
+                    </div>
                   ) : (
                     <ApperIcon name={item.icon} size={24} className="mb-1" />
                   )}

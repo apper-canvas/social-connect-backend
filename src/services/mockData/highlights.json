@@ -1,0 +1,82 @@
+[
+  {
+    "Id": 1,
+    "userId": 1,
+    "title": "Travel Adventures",
+    "coverImage": "/api/highlights/travel-cover.jpg",
+    "stories": [
+      {
+        "Id": 10,
+        "userId": 1,
+        "mediaUrl": "/api/stories/travel1.jpg",
+        "mediaType": "image",
+        "text": "Amazing view from the mountains! 🏔️",
+        "backgroundColor": "#1F2937",
+        "textColor": "#FFFFFF",
+        "createdAt": "2024-01-10T15:30:00.000Z"
+      },
+      {
+        "Id": 11,
+        "userId": 1,
+        "mediaUrl": "/api/stories/travel2.jpg",
+        "mediaType": "image",
+        "text": "Sunset at the beach 🌅",
+        "backgroundColor": "#1F2937",
+        "textColor": "#FFFFFF",
+        "createdAt": "2024-01-11T19:15:00.000Z"
+      }
+    ],
+    "createdAt": "2024-01-10T15:30:00.000Z",
+    "updatedAt": "2024-01-11T19:15:00.000Z"
+  },
+  {
+    "Id": 2,
+    "userId": 2,
+    "title": "Workouts",
+    "coverImage": "/api/highlights/workout-cover.jpg",
+    "stories": [
+      {
+        "Id": 12,
+        "userId": 2,
+        "mediaUrl": "/api/stories/workout1.mp4",
+        "mediaType": "video",
+        "text": "",
+        "backgroundColor": "#000000",
+        "textColor": "#FFFFFF",
+        "createdAt": "2024-01-12T07:00:00.000Z"
+      }
+    ],
+    "createdAt": "2024-01-12T07:00:00.000Z",
+    "updatedAt": "2024-01-12T07:00:00.000Z"
+  },
+  {
+    "Id": 3,
+    "userId": 3,
+    "title": "Food Adventures",
+    "coverImage": "/api/highlights/food-cover.jpg",
+    "stories": [
+      {
+        "Id": 13,
+        "userId": 3,
+        "mediaUrl": "/api/stories/food1.jpg",
+        "mediaType": "image",
+        "text": "Delicious homemade pasta! 🍝",
+        "backgroundColor": "#1F2937",
+        "textColor": "#FFFFFF",
+        "createdAt": "2024-01-13T20:00:00.000Z"
+      },
+      {
+        "Id": 14,
+        "userId": 3,
+        "mediaUrl": "/api/stories/food2.jpg",
+        "mediaType": "image",
+        "text": "Morning coffee perfection ☕",
+        "backgroundColor": "#1F2937",
+        "textColor": "#FFFFFF",
+        "createdAt": "2024-01-14T08:30:00.000Z"
+      }
+    ],
+    "createdAt": "2024-01-13T20:00:00.000Z",
+    "updatedAt": "2024-01-14T08:30:00.000Z"
+  }
+]

@@ -17,13 +17,14 @@ export const postService = {
     return { ...post };
   },
 
-  create: async (postData) => {
+create: async (postData) => {
     await new Promise(resolve => setTimeout(resolve, 400));
     const newPost = {
       Id: Math.max(...posts.map(p => p.Id)) + 1,
       ...postData,
       likes: 0,
       comments: 0,
+      type: postData.type || "post", // Support for story type
       createdAt: new Date().toISOString()
     };
     posts.unshift(newPost);
@@ -81,12 +82,19 @@ export const postService = {
     return { ...posts[index] };
   },
 
-  search: async (query) => {
+search: async (query) => {
     await new Promise(resolve => setTimeout(resolve, 300));
     const searchTerm = query.toLowerCase();
     return posts.filter(post => 
       post.content.toLowerCase().includes(searchTerm) ||
       post.hashtags.some(tag => tag.toLowerCase().includes(searchTerm))
     );
+  },
+
+  getByType: async (type) => {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return posts
+      .filter(post => post.type === type)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
 };

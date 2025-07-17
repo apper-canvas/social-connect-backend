@@ -5,14 +5,15 @@ import Avatar from "@/components/atoms/Avatar";
 import Button from "@/components/atoms/Button";
 import Textarea from "@/components/atoms/Textarea";
 import { cn } from "@/utils/cn";
-
 const CreatePostModal = ({ 
   isOpen, 
   onClose, 
   onCreatePost, 
-  currentUser 
+  currentUser,
+  initialType = "post"
 }) => {
   const [content, setContent] = useState("");
+  const [postType, setPostType] = useState(initialType);
   const [mediaFile, setMediaFile] = useState(null);
   const [mediaPreview, setMediaPreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -83,9 +84,35 @@ const CreatePostModal = ({
           className="glass-morphism rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Header */}
+{/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-700">
-            <h2 className="text-xl font-bold text-white">Create Post</h2>
+            <div className="flex items-center space-x-4">
+              <h2 className="text-xl font-bold text-white">Create {postType === "post" ? "Post" : "Story"}</h2>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setPostType("post")}
+                  className={cn(
+                    "px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200",
+                    postType === "post" 
+                      ? "bg-primary text-white" 
+                      : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  )}
+                >
+                  Post
+                </button>
+                <button
+                  onClick={() => setPostType("story")}
+                  className={cn(
+                    "px-3 py-1 rounded-lg text-sm font-medium transition-colors duration-200",
+                    postType === "story" 
+                      ? "bg-primary text-white" 
+                      : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  )}
+                >
+                  Story
+                </button>
+              </div>
+            </div>
             <Button
               variant="ghost"
               size="sm"

@@ -8,6 +8,7 @@ const Avatar = ({
   size = "md", 
   className, 
   fallback,
+  hasStoryRing = false,
   ...props 
 }) => {
   const sizes = {
@@ -25,10 +26,11 @@ const Avatar = ({
   };
 
   return (
-    <div 
+<div 
       className={cn(
         "relative flex items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-white font-medium overflow-hidden",
         sizes[size],
+        hasStoryRing && "ring-2 ring-gradient-to-r ring-purple-500 ring-offset-2 ring-offset-background",
         className
       )}
       {...props}

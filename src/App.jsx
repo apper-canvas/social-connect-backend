@@ -3,17 +3,23 @@ import { ToastContainer } from "react-toastify";
 import { useState, useEffect } from "react";
 import NavigationBar from "@/components/organisms/NavigationBar";
 import CreatePostModal from "@/components/molecules/CreatePostModal";
+import CreateStoryModal from "@/components/molecules/CreateStoryModal";
+import StoryViewer from "@/components/molecules/StoryViewer";
 import HomePage from "@/components/pages/HomePage";
 import ExplorePage from "@/components/pages/ExplorePage";
 import ProfilePage from "@/components/pages/ProfilePage";
 import MessagesPage from "@/components/pages/MessagesPage";
 import { userService } from "@/services/api/userService";
 import { postService } from "@/services/api/postService";
+import { storyService } from "@/services/api/storyService";
 import { toast } from "react-toastify";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showCreateStoryModal, setShowCreateStoryModal] = useState(false);
+  const [showStoryViewer, setShowStoryViewer] = useState(false);
+  const [currentStoryData, setCurrentStoryData] = useState(null);
 
   useEffect(() => {
     loadCurrentUser();
@@ -64,6 +70,30 @@ function App() {
     
     return hashtags;
   };
+const handleCreateStory = async (storyData) => {
+    try {
+      const newStory = await storyService.create({
+        userId: currentUser.Id,
+        mediaUrl: storyData.mediaFile ? "/api/uploads/story-placeholder.jpg" : null,
+        mediaType: storyData.mediaType || "image",
+        text: storyData.text || "",
+        backgroundColor: storyData.backgroundColor || "#1F2937",
+        textColor: storyData.textColor || "#FFFFFF",
+        duration: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        createdAt: new Date().toISOString()
+      });
+      
+      toast.success("Story created successfully!");
+      setShowCreateStoryModal(false);
+      
+      // Refresh stories
+      window.location.reload();
+    } catch (err) {
+      console.error("Error creating story:", err);
+      toast.error("Failed to create story");
+    }
+  };
 
   const handleOpenCreateModal = () => {
     setShowCreateModal(true);
@@ -73,12 +103,31 @@ function App() {
     setShowCreateModal(false);
   };
 
+  const handleOpenCreateStoryModal = () => {
+    setShowCreateStoryModal(true);
+  };
+
+  const handleCloseCreateStoryModal = () => {
+    setShowCreateStoryModal(false);
+  };
+
+  const handleOpenStoryViewer = (storyData) => {
+    setCurrentStoryData(storyData);
+    setShowStoryViewer(true);
+  };
+
+  const handleCloseStoryViewer = () => {
+    setShowStoryViewer(false);
+    setCurrentStoryData(null);
+  };
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <NavigationBar 
+<NavigationBar 
         currentUser={currentUser} 
         onCreatePost={handleOpenCreateModal}
+        onCreateStory={handleOpenCreateStoryModal}
+        onViewStory={handleOpenStoryViewer}
       />
 
       {/* Main Content */}
@@ -91,11 +140,27 @@ function App() {
         </Routes>
       </div>
 
-      {/* Create Post Modal */}
+{/* Create Post Modal */}
       <CreatePostModal
         isOpen={showCreateModal}
         onClose={handleCloseCreateModal}
         onCreatePost={handleCreatePost}
+        currentUser={currentUser}
+      />
+
+      {/* Create Story Modal */}
+      <CreateStoryModal
+        isOpen={showCreateStoryModal}
+        onClose={handleCloseCreateStoryModal}
+        onCreateStory={handleCreateStory}
+        currentUser={currentUser}
+      />
+
+      {/* Story Viewer */}
+      <StoryViewer
+        isOpen={showStoryViewer}
+        onClose={handleCloseStoryViewer}
+        storyData={currentStoryData}
         currentUser={currentUser}
       />
 

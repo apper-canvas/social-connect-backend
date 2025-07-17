@@ -11,12 +11,13 @@ const Button = React.forwardRef(({
   disabled = false,
   ...props 
 }, ref) => {
-  const variants = {
+const variants = {
     primary: "bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white border-transparent shadow-lg shadow-primary/25",
     secondary: "bg-surface hover:bg-gray-dark text-white border-gray-600 hover:border-gray-500",
     outline: "border-2 border-primary text-primary hover:bg-primary hover:text-white bg-transparent",
     ghost: "text-gray-300 hover:text-white hover:bg-gray-dark border-transparent",
     danger: "bg-red-500 hover:bg-red-600 text-white border-transparent shadow-lg shadow-red-500/25",
+    story: "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-transparent shadow-lg shadow-purple-500/25",
   };
 
   const sizes = {
