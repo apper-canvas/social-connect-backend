@@ -6,10 +6,13 @@ import Error from "@/components/ui/Error";
 import Empty from "@/components/ui/Empty";
 import { feedService } from "@/services/api/feedService";
 import { userService } from "@/services/api/userService";
+import { postService } from "@/services/api/postService";
+import { toast } from "react-toastify";
 
 const Feed = ({ 
   type = "home", 
   userId = null, 
+  currentUser,
   onCreatePost,
   refreshTrigger 
 }) => {
@@ -105,12 +108,37 @@ const Feed = ({
       // Fallback to clipboard
       await navigator.clipboard.writeText(`${window.location.origin}/post/${postId}`);
     }
+};
+
+  const handleEdit = async (postId, updatedData) => {
+    try {
+      const updatedPost = await postService.update(postId, updatedData);
+      setPosts(prev => prev.map(post => 
+        post.Id === postId ? updatedPost : post
+      ));
+      toast.success("Post updated successfully");
+    } catch (err) {
+      console.error("Error updating post:", err);
+      toast.error("Failed to update post");
+      throw err;
+    }
+  };
+
+  const handleDelete = async (postId) => {
+    try {
+      await postService.delete(postId);
+      setPosts(prev => prev.filter(post => post.Id !== postId));
+      toast.success("Post deleted successfully");
+    } catch (err) {
+      console.error("Error deleting post:", err);
+      toast.error("Failed to delete post");
+      throw err;
+    }
   };
 
   const handleRetry = () => {
     loadPosts(1);
   };
-
   if (loading && posts.length === 0) {
     return <Loading type="posts" />;
   }
@@ -138,12 +166,15 @@ const Feed = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
         >
-          <PostCard
+<PostCard
             post={post}
             user={users[post.userId]}
+            currentUser={currentUser}
             onLike={handleLike}
             onComment={handleComment}
             onShare={handleShare}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
           />
         </motion.div>
       ))}

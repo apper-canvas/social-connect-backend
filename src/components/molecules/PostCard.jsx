@@ -4,21 +4,29 @@ import { formatDistanceToNow } from "date-fns";
 import ApperIcon from "@/components/ApperIcon";
 import Avatar from "@/components/atoms/Avatar";
 import Button from "@/components/atoms/Button";
+import Textarea from "@/components/atoms/Textarea";
 import { cn } from "@/utils/cn";
 
 const PostCard = ({ 
   post, 
   user, 
+  currentUser,
   onLike, 
   onComment, 
-  onShare, 
+  onShare,
+  onEdit,
+  onDelete,
   isLiked = false,
   className 
 }) => {
   const [showComments, setShowComments] = useState(false);
   const [liked, setLiked] = useState(isLiked);
   const [likeCount, setLikeCount] = useState(post.likes || 0);
-
+  const [showMenu, setShowMenu] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editContent, setEditContent] = useState(post.content);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const handleLike = () => {
     const newLiked = !liked;
     setLiked(newLiked);
@@ -45,8 +53,33 @@ const PostCard = ({
         );
       }
       return word + " ";
-    });
+});
   };
+
+  const handleEditSubmit = async () => {
+    if (!editContent.trim()) return;
+    
+    setIsEditing(true);
+    try {
+      await onEdit(post.Id, { content: editContent.trim() });
+      setShowEditModal(false);
+    } catch (error) {
+      console.error("Error editing post:", error);
+    } finally {
+      setIsEditing(false);
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      await onDelete(post.Id);
+      setShowDeleteConfirm(false);
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+
+  const isOwner = currentUser && post.userId === currentUser.Id;
 
   return (
     <motion.div
@@ -73,9 +106,52 @@ const PostCard = ({
             @{user?.username} · {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
           </p>
         </div>
-        <Button variant="ghost" size="sm">
-          <ApperIcon name="MoreHorizontal" size={16} />
-        </Button>
+        {isOwner && (
+          <div className="relative">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setShowMenu(!showMenu)}
+            >
+              <ApperIcon name="MoreHorizontal" size={16} />
+            </Button>
+            
+            {/* Dropdown Menu */}
+            <AnimatePresence>
+              {showMenu && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="absolute right-0 top-full mt-2 w-48 glass-morphism rounded-lg shadow-lg z-10"
+                >
+                  <div className="py-2">
+                    <button
+                      onClick={() => {
+                        setShowEditModal(true);
+                        setShowMenu(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-white hover:bg-gray-700 transition-colors duration-200 flex items-center space-x-2"
+                    >
+                      <ApperIcon name="Edit" size={16} />
+                      <span>Edit Post</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowDeleteConfirm(true);
+                        setShowMenu(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-red-400 hover:bg-gray-700 transition-colors duration-200 flex items-center space-x-2"
+                    >
+                      <ApperIcon name="Trash2" size={16} />
+                      <span>Delete Post</span>
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
       </div>
 
       {/* Post Content */}
@@ -194,6 +270,119 @@ const PostCard = ({
                 </div>
               </div>
             </div>
+          </motion.div>
+)}
+      </AnimatePresence>
+
+      {/* Edit Modal */}
+      <AnimatePresence>
+        {showEditModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => setShowEditModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="glass-morphism rounded-xl w-full max-w-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-white">Edit Post</h3>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowEditModal(false)}
+                  >
+                    <ApperIcon name="X" size={16} />
+                  </Button>
+                </div>
+                
+                <div className="space-y-4">
+                  <Textarea
+                    value={editContent}
+                    onChange={(e) => setEditContent(e.target.value)}
+                    placeholder="What's on your mind?"
+                    className="min-h-[120px]"
+                    maxLength={280}
+                  />
+                  
+                  <div className="flex justify-end space-x-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowEditModal(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={handleEditSubmit}
+                      disabled={!editContent.trim() || isEditing}
+                      loading={isEditing}
+                      className="bg-gradient-to-r from-primary to-secondary"
+                    >
+                      Save Changes
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {showDeleteConfirm && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => setShowDeleteConfirm(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="glass-morphism rounded-xl w-full max-w-md"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center">
+                    <ApperIcon name="AlertTriangle" size={20} className="text-red-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">Delete Post</h3>
+                    <p className="text-sm text-gray-400">This action cannot be undone</p>
+                  </div>
+                </div>
+                
+                <p className="text-gray-300 mb-6">
+                  Are you sure you want to delete this post? This will permanently remove it from your profile and timeline.
+                </p>
+                
+                <div className="flex justify-end space-x-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowDeleteConfirm(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleDeleteConfirm}
+                    className="bg-red-500 hover:bg-red-600"
+                  >
+                    Delete Post
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
