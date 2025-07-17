@@ -48,11 +48,17 @@ useEffect(() => {
         postsData = await feedService.getHomeFeed();
       }
 
-      // Load user data for posts
+// Load user data for posts
       const userIds = [...new Set(postsData.map(post => post.userId))];
+      // Also load original post users for reposts
+      const originalPostUserIds = postsData
+        .filter(post => post.isRepost && post.originalPost)
+        .map(post => post.originalPost.userId);
+      const allUserIds = [...new Set([...userIds, ...originalPostUserIds])];
+      
       const usersData = {};
       
-      for (const uid of userIds) {
+      for (const uid of allUserIds) {
         try {
           const user = await userService.getById(uid);
           usersData[uid] = user;
@@ -67,11 +73,25 @@ useEffect(() => {
         }
       }
 
-      if (pageNum === 1) {
-        setPosts(postsData);
+      // Add original post user data to reposted posts
+      const enrichedPosts = postsData.map(post => {
+        if (post.isRepost && post.originalPost) {
+          return {
+            ...post,
+            originalPost: {
+              ...post.originalPost,
+              user: usersData[post.originalPost.userId]
+            }
+          };
+        }
+        return post;
+      });
+
+if (pageNum === 1) {
+        setPosts(enrichedPosts);
         setUsers(usersData);
       } else {
-        setPosts(prev => [...prev, ...postsData]);
+        setPosts(prev => [...prev, ...enrichedPosts]);
         setUsers(prev => ({ ...prev, ...usersData }));
       }
 
@@ -104,7 +124,7 @@ useEffect(() => {
     console.log("Comment on post:", postId);
   };
 
-  const handleShare = async (postId) => {
+const handleShare = async (postId) => {
     try {
       await navigator.share({
         title: "Check out this post",
@@ -114,7 +134,28 @@ useEffect(() => {
       // Fallback to clipboard
       await navigator.clipboard.writeText(`${window.location.origin}/post/${postId}`);
     }
-};
+  };
+
+  const handleRepost = async (postId, comment) => {
+    try {
+      const originalPost = posts.find(p => p.Id === postId);
+      if (!originalPost) return;
+      
+      const repostedPost = await postService.repost(postId, currentUser.Id, comment);
+      
+      // Add to local state
+      setPosts(prev => [repostedPost, ...prev]);
+      
+      // Load user data for the repost
+      const repostUser = await userService.getById(currentUser.Id);
+      setUsers(prev => ({ ...prev, [currentUser.Id]: repostUser }));
+      
+      toast.success("Post reposted successfully");
+    } catch (err) {
+      console.error("Error reposting:", err);
+      toast.error("Failed to repost");
+    }
+  };
 
   const handleEdit = async (postId, updatedData) => {
     try {
@@ -181,6 +222,7 @@ useEffect(() => {
             onShare={handleShare}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onRepost={handleRepost}
           />
         </motion.div>
       ))}

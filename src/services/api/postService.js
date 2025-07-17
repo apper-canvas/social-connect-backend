@@ -95,6 +95,28 @@ search: async (query) => {
     await new Promise(resolve => setTimeout(resolve, 300));
     return posts
       .filter(post => post.type === type)
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  },
+
+  repost: async (postId, userId, comment = "") => {
+    await new Promise(resolve => setTimeout(resolve, 400));
+    const originalPost = posts.find(p => p.Id === parseInt(postId));
+    if (!originalPost) {
+      throw new Error("Post not found");
+    }
+    
+    const repost = {
+      Id: Math.max(...posts.map(p => p.Id)) + 1,
+      userId: parseInt(userId),
+      isRepost: true,
+      repostComment: comment,
+      originalPost: { ...originalPost },
+      likes: 0,
+      comments: 0,
+      createdAt: new Date().toISOString()
+    };
+    
+    posts.unshift(repost);
+    return { ...repost };
   }
 };
