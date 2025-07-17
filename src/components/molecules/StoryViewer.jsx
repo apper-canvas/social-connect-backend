@@ -23,11 +23,11 @@ const StoryViewer = ({
   const stories = storyData?.stories || [];
   const currentStory = stories[currentStoryIndex];
 
-  useEffect(() => {
+useEffect(() => {
     if (isOpen && storyData?.startIndex !== undefined) {
       setCurrentStoryIndex(storyData.startIndex);
     }
-  }, [isOpen, storyData]);
+  }, [isOpen, storyData?.startIndex]);
 
   useEffect(() => {
     if (currentUser) {
