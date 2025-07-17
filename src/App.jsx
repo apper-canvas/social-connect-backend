@@ -9,6 +9,7 @@ import HomePage from "@/components/pages/HomePage";
 import ExplorePage from "@/components/pages/ExplorePage";
 import ProfilePage from "@/components/pages/ProfilePage";
 import MessagesPage from "@/components/pages/MessagesPage";
+import SearchResultsPage from "@/components/pages/SearchResultsPage";
 import { userService } from "@/services/api/userService";
 import { postService } from "@/services/api/postService";
 import { storyService } from "@/services/api/storyService";
@@ -142,6 +143,7 @@ toast.success("Story created successfully!");
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="/messages" element={<MessagesPage />} />
+          <Route path="/search" element={<SearchResultsPage currentUser={currentUser} />} />
         </Routes>
       </div>
 

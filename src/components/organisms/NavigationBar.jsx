@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
 import Avatar from "@/components/atoms/Avatar";
 import StoryRing from "@/components/molecules/StoryRing";
+import SearchBar from "@/components/molecules/SearchBar";
 import { storyService } from "@/services/api/storyService";
+import { searchService } from "@/services/api/searchService";
 import { cn } from "@/utils/cn";
 
 const NavigationBar = ({ currentUser, onCreatePost, onCreateStory, onViewStory }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isCreateHovered, setIsCreateHovered] = useState(false);
   const [stories, setStories] = useState([]);
   const [userStories, setUserStories] = useState([]);
@@ -32,11 +35,35 @@ const NavigationBar = ({ currentUser, onCreatePost, onCreateStory, onViewStory }
     }
   };
 
-  const handleStoryClick = () => {
+const handleStoryClick = () => {
     if (userStories.length > 0) {
       onViewStory({ stories: userStories, startIndex: 0 });
     } else {
       onCreateStory();
+    }
+  };
+
+  const handleSearch = async (query) => {
+    try {
+      const results = await searchService.search(query);
+      return results;
+    } catch (error) {
+      console.error("Search error:", error);
+      return [];
+    }
+  };
+
+  const handleSelectUser = (user) => {
+    navigate(`/profile/${user.Id}`);
+  };
+
+  const handleSelectHashtag = (hashtag) => {
+    navigate(`/search?hashtag=${hashtag.tag}`);
+  };
+
+  const handleSearchSubmit = (query) => {
+    if (query.trim()) {
+      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
     }
   };
 const navItems = [
@@ -61,6 +88,18 @@ const navItems = [
               <ApperIcon name="Zap" size={20} className="text-white" />
             </div>
             <h1 className="text-xl font-bold text-gradient">SocialConnect</h1>
+</div>
+          
+          {/* Search Bar */}
+          <div className="mb-6">
+            <SearchBar 
+              onSearch={handleSearch}
+              onSelectUser={handleSelectUser}
+              onSelectHashtag={handleSelectHashtag}
+              onSubmit={handleSearchSubmit}
+              placeholder="Search posts, users, hashtags..."
+              className="w-full"
+            />
           </div>
           
           <nav className="space-y-2">
@@ -123,6 +162,20 @@ const navItems = [
               <p className="text-sm text-gray-400">@{currentUser?.username}</p>
             </div>
           </div>
+        </div>
+      </div>
+
+{/* Mobile Search Bar - Fixed top */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 glass-morphism border-b border-gray-700 z-50">
+        <div className="p-4">
+          <SearchBar 
+            onSearch={handleSearch}
+            onSelectUser={handleSelectUser}
+            onSelectHashtag={handleSelectHashtag}
+            onSubmit={handleSearchSubmit}
+            placeholder="Search posts, users, hashtags..."
+            className="w-full"
+          />
         </div>
       </div>
 

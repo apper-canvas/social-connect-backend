@@ -8,6 +8,7 @@ const SearchBar = ({
   onSearch, 
   onSelectUser, 
   onSelectHashtag,
+  onSubmit,
   placeholder = "Search users and hashtags...",
   className 
 }) => {
@@ -43,8 +44,15 @@ const SearchBar = ({
     }
   };
 
-  const handleInputChange = (e) => {
+const handleInputChange = (e) => {
     setQuery(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+      onSubmit?.(query.trim());
+    }
   };
 
   const handleSelectUser = (user) => {
@@ -65,9 +73,9 @@ const SearchBar = ({
     setIsOpen(false);
   };
 
-  return (
+return (
     <div className={cn("relative", className)}>
-      <div className="relative">
+      <form onSubmit={handleSubmit} className="relative">
         <ApperIcon 
           name="Search" 
           size={20} 
@@ -95,9 +103,8 @@ const SearchBar = ({
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           </div>
-        )}
-      </div>
-
+)}
+      </form>
       <AnimatePresence>
         {isOpen && results.length > 0 && (
           <motion.div
