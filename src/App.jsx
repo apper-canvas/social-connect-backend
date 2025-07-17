@@ -20,6 +20,7 @@ function App() {
   const [showCreateStoryModal, setShowCreateStoryModal] = useState(false);
   const [showStoryViewer, setShowStoryViewer] = useState(false);
   const [currentStoryData, setCurrentStoryData] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     loadCurrentUser();
@@ -48,11 +49,11 @@ function App() {
         createdAt: new Date().toISOString()
       });
       
-      toast.success("Post created successfully!");
+toast.success("Post created successfully!");
       setShowCreateModal(false);
       
-      // Refresh the page to show new post
-      window.location.reload();
+      // Trigger feed refresh to show new post
+      setRefreshTrigger(prev => prev + 1);
     } catch (err) {
       console.error("Error creating post:", err);
       toast.error("Failed to create post");
@@ -84,11 +85,11 @@ const handleCreateStory = async (storyData) => {
         createdAt: new Date().toISOString()
       });
       
-      toast.success("Story created successfully!");
+toast.success("Story created successfully!");
       setShowCreateStoryModal(false);
       
-      // Refresh stories
-      window.location.reload();
+      // Trigger refresh to show new story
+      setRefreshTrigger(prev => prev + 1);
     } catch (err) {
       console.error("Error creating story:", err);
       toast.error("Failed to create story");
@@ -119,6 +120,10 @@ const handleCreateStory = async (storyData) => {
   const handleCloseStoryViewer = () => {
     setShowStoryViewer(false);
     setCurrentStoryData(null);
+};
+
+  const handleRefreshFeed = () => {
+    setRefreshTrigger(prev => prev + 1);
   };
   return (
     <div className="min-h-screen bg-background">
@@ -132,8 +137,8 @@ const handleCreateStory = async (storyData) => {
 
       {/* Main Content */}
       <div className="lg:ml-64 pb-16 lg:pb-0">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
+<Routes>
+          <Route path="/" element={<HomePage currentUser={currentUser} refreshTrigger={refreshTrigger} onRefreshFeed={handleRefreshFeed} />} />
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/profile/:userId" element={<ProfilePage />} />
           <Route path="/messages" element={<MessagesPage />} />

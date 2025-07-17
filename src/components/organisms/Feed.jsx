@@ -23,9 +23,15 @@ const Feed = ({
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
+useEffect(() => {
     loadPosts();
-  }, [type, userId, refreshTrigger]);
+  }, [type, userId]);
+
+  useEffect(() => {
+    if (refreshTrigger !== undefined) {
+      loadPosts();
+    }
+  }, [refreshTrigger]);
 
   const loadPosts = async (pageNum = 1) => {
     try {

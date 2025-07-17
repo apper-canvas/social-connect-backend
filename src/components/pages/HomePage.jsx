@@ -11,8 +11,8 @@ import { postService } from "@/services/api/postService";
 import { storyService } from "@/services/api/storyService";
 import { toast } from "react-toastify";
 
-const HomePage = () => {
-  const [currentUser, setCurrentUser] = useState(null);
+const HomePage = ({ currentUser: propCurrentUser, refreshTrigger: propRefreshTrigger, onRefreshFeed }) => {
+  const [currentUser, setCurrentUser] = useState(propCurrentUser);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showCreateStoryModal, setShowCreateStoryModal] = useState(false);
   const [showStoryViewer, setShowStoryViewer] = useState(false);
@@ -22,8 +22,18 @@ const HomePage = () => {
   const [userStories, setUserStories] = useState([]);
 
 useEffect(() => {
-    loadCurrentUser();
-  }, []);
+    if (propCurrentUser) {
+      setCurrentUser(propCurrentUser);
+    } else {
+      loadCurrentUser();
+    }
+  }, [propCurrentUser]);
+
+  useEffect(() => {
+    if (propRefreshTrigger !== undefined) {
+      setRefreshTrigger(propRefreshTrigger);
+    }
+  }, [propRefreshTrigger]);
 
   useEffect(() => {
     if (currentUser) {
@@ -88,10 +98,13 @@ useEffect(() => {
         comments: 0,
         hashtags: extractHashtags(postData.content),
         createdAt: new Date().toISOString()
-      });
+});
       
       toast.success("Post created successfully!");
       setRefreshTrigger(prev => prev + 1);
+      if (onRefreshFeed) {
+        onRefreshFeed();
+      }
       setShowCreateModal(false);
     } catch (err) {
       console.error("Error creating post:", err);
@@ -252,9 +265,10 @@ const handleOpenCreateModal = () => {
             ))}
         </div>
       </motion.div>
-      {/* Feed */}
+{/* Feed */}
       <Feed 
         type="home" 
+        currentUser={currentUser}
         onCreatePost={handleOpenCreateModal}
         refreshTrigger={refreshTrigger}
       />
